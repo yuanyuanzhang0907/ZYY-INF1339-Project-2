@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+        <script>
+
+            var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q=rainbow&api-key=iGRJBxHl5BzZ4Cs6AjByeQ6lVpflBOxg";
+            var articleCount = 0
+            
+            function setup() {  
+              noCanvas();
+              loadJSON(url, gotData);
+            }
+            function gotData(data) {
+               appendToPage (data)
+
+               var hits = data.response.meta.hits
+               
+               for (var i = 1; i < 3; i++) {
+               loadJSON(url + '&page=' + i, appendToPage)
+               }
+           }
+            
+            function appendToPage(data) {
+
+                var articles = data.response.docs;
+
+                for (var i = 0; i < articles.length; i++) {
+
+                    articleCount++
+
+                    h = document.createElement('h3')
+                    h.innerHTML = '(' + articleCount + ') ' + articles[i].headline.main
+                    document.body.appendChild(h);
+
+                    p = document.createElement('p')
+                    p.innerHTML = articles[i].snippet
+                    document.body.appendChild(p);  
+                  }
+            }
+        </script>
+    </head>
+    <body>
+        <h1>New York Times API: Articles from all time about rainbows</h1>
+    </body>
+</html>
